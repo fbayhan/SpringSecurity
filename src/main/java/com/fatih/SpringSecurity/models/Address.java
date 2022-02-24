@@ -1,5 +1,6 @@
 package com.fatih.SpringSecurity.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -25,8 +26,9 @@ public class Address {
     private Boolean isActive;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     public User getUser() {
