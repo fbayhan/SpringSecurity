@@ -5,6 +5,7 @@ import com.fatih.SpringSecurity.models.Address;
 import com.fatih.SpringSecurity.models.User;
 import com.fatih.SpringSecurity.servises.AddressService;
 import com.fatih.SpringSecurity.servises.UserService;
+import com.fatih.SpringSecurity.servises.email.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 public class PublicController {
 
     Logger logger = LoggerFactory.getLogger(PublicController.class);
+
+    @Autowired
+    EmailService emailService;
 
 
     @Autowired
@@ -49,7 +53,7 @@ public class PublicController {
         logger.error("An ERROR Message");
 
         Address address = addressService.getById(5L);
-
+        emailService.sendMail("fbayhan@havelsan.com.tr", "Merhabalar", "Bu mail otomatik gönderilmiştir");
         return address;
     }
 
