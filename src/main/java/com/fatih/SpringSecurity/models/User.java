@@ -1,14 +1,12 @@
 package com.fatih.SpringSecurity.models;
 
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tbl_user")
@@ -19,7 +17,7 @@ public class User {
 
 
     private String userName;
-    private String email;
+    private String emailAdress;
     private String name;
     private String surname;
     private Date createdDate;
@@ -27,12 +25,20 @@ public class User {
 
     private String password;
 
+    private Boolean mailConfirmed;
+    private Boolean forgetPassword;
+    private UUID uuidCode;
+
+    private Date uuidExpirationDate;
+
+    private Boolean passwordUsable;
+
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
 
     @OneToMany(mappedBy = "user")
-    private Set<Posts> items=new HashSet<>();
+    private Set<Posts> items = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -40,14 +46,14 @@ public class User {
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "postIs")
     )
-    private Set<Posts> likedPosts=new HashSet<>();
+    private Set<Posts> likedPosts = new HashSet<>();
 
 
     @ManyToMany
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "roleId")
     )
-    private Set<Roles> roles=new HashSet<>();
+    private Set<Roles> roles = new HashSet<>();
 
     public Set<Roles> getRoles() {
         return roles;
@@ -97,12 +103,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailAdress() {
+        return emailAdress;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailAdress(String email) {
+        this.emailAdress = email;
     }
 
     public String getName() {
@@ -146,18 +152,64 @@ public class User {
         this.password = password;
     }
 
+    public Boolean getMailConfirmed() {
+        return mailConfirmed;
+    }
+
+    public void setMailConfirmed(Boolean mailConfirmed) {
+        this.mailConfirmed = mailConfirmed;
+    }
+
+    public Boolean getForgetPassword() {
+        return forgetPassword;
+    }
+
+    public void setForgetPassword(Boolean forgetPassword) {
+        this.forgetPassword = forgetPassword;
+    }
+
+    public UUID getUuidCode() {
+        return uuidCode;
+    }
+
+    public void setUuidCode(UUID uuidCode) {
+        this.uuidCode = uuidCode;
+    }
+
+    public Date getUuidExpirationDate() {
+        return uuidExpirationDate;
+    }
+
+    public void setUuidExpirationDate(Date uuidExpirationDate) {
+
+
+        this.uuidExpirationDate = Date.from(uuidExpirationDate.toInstant().plus(Duration.ofHours(2)));
+    }
+
+    public Boolean getPasswordUsable() {
+        return passwordUsable;
+    }
+
+    public void setPasswordUsable(Boolean passwordUsable) {
+        this.passwordUsable = passwordUsable;
+    }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
-                ", email='" + email + '\'' +
+                ", email='" + emailAdress + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", createdDate=" + createdDate +
                 ", isActive=" + isActive +
                 ", password='" + password + '\'' +
+                ", mailConfirmed=" + mailConfirmed +
+                ", forgetPassword=" + forgetPassword +
+                ", uuidCode=" + uuidCode +
+                ", uuidExpirationDate=" + uuidExpirationDate +
+                ", passwordUsable=" + passwordUsable +
                 ", address=" + address +
                 ", items=" + items +
                 ", likedPosts=" + likedPosts +

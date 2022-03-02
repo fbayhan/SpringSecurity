@@ -1,5 +1,7 @@
 package com.fatih.SpringSecurity.controllers;
 
+import com.fatih.SpringSecurity.dtos.EmailDTO;
+import com.fatih.SpringSecurity.dtos.RenewPasswordDTO;
 import com.fatih.SpringSecurity.dtos.UserDTO;
 import com.fatih.SpringSecurity.models.Address;
 import com.fatih.SpringSecurity.models.User;
@@ -9,6 +11,7 @@ import com.fatih.SpringSecurity.servises.email.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,8 +56,45 @@ public class PublicController {
         logger.error("An ERROR Message");
 
         Address address = addressService.getById(5L);
-        emailService.sendMail("fbayhan@havelsan.com.tr", "Merhabalar", "Bu mail otomatik gönderilmiştir");
         return address;
+    }
+
+    @GetMapping(value = "confirmmail/{uuid}")
+    public ResponseEntity<String> confirmEmail(@PathVariable String uuid) {
+        Boolean isUuidActive = userService.confirmMail(uuid);
+        if (isUuidActive) {
+            return new ResponseEntity<>("Hesap aktif edildi", HttpStatus.CREATED);
+
+        } else {
+            return new ResponseEntity<>("UUID süresi dolmuş, yenileyin", HttpStatus.UNAUTHORIZED);
+        }
+
+
+    }
+
+    @PostMapping(value = "forgetpassword")
+    public ResponseEntity<String> forgetPassword(@RequestBody EmailDTO emailDTO) {
+        Boolean passwordForgetable = userService.forgetPassword(emailDTO.getMail());
+
+        if (passwordForgetable) {
+            return new ResponseEntity<>("Reset password mail sent", HttpStatus.CREATED);
+
+        } else {
+            return new ResponseEntity<>("There is no such a email, please register or check email address", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping(value = "renewpassword")
+    public ResponseEntity<String> renewPassword(@RequestBody RenewPasswordDTO renewPasswordDTO) {
+        Boolean renew = userService.renewPassword(renewPasswordDTO);
+
+        if (renew) {
+            return new ResponseEntity<>("Your password changed", HttpStatus.CREATED);
+
+        } else {
+            return new ResponseEntity<>("There is no such a email, please register or check email address", HttpStatus.UNAUTHORIZED);
+
+        }
     }
 
 

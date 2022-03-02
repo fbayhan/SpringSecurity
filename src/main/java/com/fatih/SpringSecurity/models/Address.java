@@ -3,6 +3,7 @@ package com.fatih.SpringSecurity.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -1,5 +1,8 @@
 package com.fatih.SpringSecurity.servises.email;
 
+import com.fatih.SpringSecurity.controllers.PublicController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,31 +12,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService
 {
-    @Autowired
-    private JavaMailSender mailSender;
+    Logger logger = LoggerFactory.getLogger(PublicController.class);
 
-    @Autowired
-    private SimpleMailMessage preConfiguredMessage;
 
-    /**
-     * This method will send compose and send the message
-     * */
-    public void sendMail(String to, String subject, String body)
-    {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        mailSender.send(message);
+    public  void SendEmail(){
+        logger.info("Email sent");
     }
 
-    /**
-     * This method will send a pre-configured message
-     * */
-    public void sendPreConfiguredMail(String message)
-    {
-        SimpleMailMessage mailMessage = new SimpleMailMessage(preConfiguredMessage);
-        mailMessage.setText(message);
-        mailSender.send(mailMessage);
+    public  void  sendMailConfirmation(){
+        System.out.println("Email confirmationEmail confirmation mail sent");
+        logger.info("Email confirmationEmail confirmation mail sent");
     }
+
+    public  void  mailConfirmed(){
+        logger.info("Your email has confirmed successfully.");
+    }
+
+    public  void  sendResetPasswordMail(){
+        logger.info("Reset password mail sent");
+    }
+
+
+
 }
